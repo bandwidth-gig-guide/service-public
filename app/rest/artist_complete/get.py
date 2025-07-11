@@ -1,0 +1,63 @@
+from app.query.fetch_one import execute
+from app.format.artist_complete import format
+from app.model.artist_complete import ArtistComplete
+from uuid import UUID
+
+def get(artist_id: UUID) -> ArtistComplete:
+    response = execute(query(), value(artist_id))
+    return format(response)
+
+def query():
+    return """
+        SELECT 
+            Artist.ArtistID,
+            Artist.Title,
+            Artist.Country,
+            Artist.City,
+            Artist.StateCode,
+            Artist.YearFounded,
+            Artist.Description,
+            Artist.SpotifyEmbedURL,
+            Artist.YoutubeEmbedURL,
+
+            EXISTS(
+                SELECT 1 
+                FROM ArtistFeatured 
+                WHERE ArtistID = Artist.ArtistID
+            ) AS isFeatured,
+
+            (
+                SELECT json_agg(Image.URL ORDER BY ArtistImage.DisplayOrder ASC)
+                FROM Image
+                JOIN ArtistImage ON Image.ImageID = ArtistImage.ImageID
+                WHERE ArtistImage.ArtistID = Artist.ArtistID
+            ) AS ImageURLs,
+
+            (
+                SELECT json_agg(json_build_object(
+                    'SocialPlatform', SocialPlatform,
+                    'Handle', Handle,
+                    'URL', URL
+                ))
+                FROM ArtistSocial
+                WHERE ArtistSocial.ArtistID = Artist.ArtistID
+            ) AS Socials,
+
+            (
+                SELECT json_agg(Type)
+                FROM ArtistType
+                WHERE ArtistType.ArtistID = Artist.ArtistID
+            ) AS Types,
+
+            (
+                SELECT json_agg(Tag)
+                FROM ArtistTag
+                WHERE ArtistTag.ArtistID = Artist.ArtistID
+            ) AS Tags
+
+        FROM Artist
+        WHERE Artist.ArtistID = %s;
+    """
+
+def value(artist_id: UUID):
+    return (str(artist_id),)
