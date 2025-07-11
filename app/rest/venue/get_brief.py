@@ -1,9 +1,8 @@
 from app.query.fetch_one import execute
-from app.format.venue_card import format
-from app.model.venue_card import VenueCard
+from app.model.venue_brief import VenueBrief, format
 from uuid import UUID
 
-def get(venue_id: UUID) -> VenueCard:
+def get_brief(venue_id: UUID) -> VenueBrief:
     response = execute(query(), values(venue_id))
     return format(response)
 
@@ -16,32 +15,31 @@ def query():
             Venue.StreetAddress,
             Venue.StateCode,
             Venue.PostCode,
+
             EXISTS(
                 SELECT 1 
                 FROM VenueFeatured 
-                WHERE VenueID = %s
+                WHERE VenueID = Venue.VenueID
             ) AS IsFeatured,
+
             (
                 SELECT URL 
                 FROM Image 
                 JOIN VenueImage ON Image.ImageID = VenueImage.ImageID 
-                WHERE VenueImage.VenueID = %s 
+                WHERE VenueImage.VenueID = Venue.VenueID 
                 ORDER BY DisplayOrder ASC 
                 LIMIT 1
             ) AS ImageURL,
+
             (
                 SELECT COUNT(*) 
                 FROM EventPerformance 
-                WHERE VenueID = %s AND StartDateTime > NOW()
+                WHERE VenueID = Venue.VenueID AND StartDateTime > NOW()
             ) AS UpcomingEventCount
+
         FROM Venue 
         WHERE VenueID = %s;
     """
 
 def values(venue_id: UUID):
-    return (
-        str(venue_id),
-        str(venue_id),
-        str(venue_id),
-        str(venue_id)
-    )
+    return (str(venue_id),)

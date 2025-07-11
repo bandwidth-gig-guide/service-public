@@ -1,9 +1,8 @@
 from app.query.fetch_one import execute
-from app.format.venue_complete import format
-from app.model.venue_complete import VenueComplete
+from app.model.venue import Venue, format
 from uuid import UUID
 
-def get(venue_id: UUID) -> VenueComplete:
+def get_complete(venue_id: UUID) -> Venue:
     response = execute(query(), value(venue_id))
     return format(response)
 
@@ -76,7 +75,17 @@ def query():
                 FROM VenueOpeningHours
                 WHERE VenueOpeningHours.VenueID = Venue.VenueID
                 LIMIT 1
-            ) AS OpeningHours
+            ) AS OpeningHours,
+
+            (
+                SELECT json_agg(
+                    EventID 
+                    ORDER BY StartDateTime ASC
+                )
+                FROM Event
+                WHERE Event.VenueID = Venue.VenueID
+                AND Event.StartDateTime > NOW()
+            ) AS UpcomingEventIDs
 
         FROM Venue
         WHERE Venue.VenueID = %s;

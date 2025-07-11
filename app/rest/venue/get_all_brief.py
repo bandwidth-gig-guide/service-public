@@ -1,8 +1,7 @@
 from app.query.fetch_list import execute
-from app.format.venue_card import format
-from app.model.venue_card import VenueCard
+from app.model.venue_brief import VenueBrief, format
 
-def get_all() -> list[VenueCard]:
+def get_all_brief() -> list[VenueBrief]:
     rows = execute(query())
     return [format(row) for row in rows]
 
@@ -15,11 +14,13 @@ def query():
             Venue.StreetAddress,
             Venue.StateCode,
             Venue.PostCode,
+
             EXISTS(
                 SELECT 1 
                 FROM VenueFeatured 
                 WHERE VenueID = Venue.VenueID
             ) AS IsFeatured,
+
             (
                 SELECT URL 
                 FROM Image 
@@ -28,10 +29,12 @@ def query():
                 ORDER BY DisplayOrder ASC 
                 LIMIT 1
             ) AS ImageURL,
+
             (
                 SELECT COUNT(*) 
                 FROM EventPerformance 
                 WHERE VenueID = Venue.VenueID AND StartDateTime > NOW()
             ) AS EventCount
+
         FROM Venue;
     """

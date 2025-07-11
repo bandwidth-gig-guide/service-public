@@ -1,9 +1,8 @@
 from app.query.fetch_one import execute
-from app.format.artist_complete import format
-from app.model.artist_complete import ArtistComplete
+from app.model.artist import Artist, format
 from uuid import UUID
 
-def get(artist_id: UUID) -> ArtistComplete:
+def get_complete(artist_id: UUID) -> Artist:
     response = execute(query(), value(artist_id))
     return format(response)
 
@@ -53,7 +52,17 @@ def query():
                 SELECT json_agg(Tag)
                 FROM ArtistTag
                 WHERE ArtistTag.ArtistID = Artist.ArtistID
-            ) AS Tags
+            ) AS Tags,
+
+            (
+                SELECT json_agg(
+                    EventID
+                    ORDER BY StartDateTime ASC    
+                )
+                FROM EventPerformance
+                WHERE EventPerformance.ArtistID = Artist.ArtistID
+                AND EventPerformance.StartDateTime > NOW()
+            ) AS UpcomingEventIDs
 
         FROM Artist
         WHERE Artist.ArtistID = %s;

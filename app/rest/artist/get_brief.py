@@ -1,10 +1,10 @@
-from app.query.fetch_list import execute
-from app.format.artist_card import format
-from app.model.artist_card import ArtistCard
+from app.query.fetch_one import execute
+from app.model.artist_brief import ArtistBrief, format
+from uuid import UUID
 
-def get_all() -> list[ArtistCard]:
-    rows = execute(query())
-    return [format(row) for row in rows]
+def get_brief(artist_id: UUID) -> ArtistBrief:
+    response = execute(query(), values(artist_id))
+    return format(response)
 
 def query():
     return """
@@ -13,11 +13,13 @@ def query():
             Artist.Title,
             Artist.Country,
             Artist.City,
+
             EXISTS(
                 SELECT 1 
                 FROM ArtistFeatured 
                 WHERE ArtistID = Artist.ArtistID
             ) AS IsFeatured,
+
             (
                 SELECT URL 
                 FROM Image 
@@ -26,10 +28,16 @@ def query():
                 ORDER BY DisplayOrder ASC 
                 LIMIT 1
             ) AS ImageURL,
+
             (
                 SELECT COUNT(*) 
                 FROM EventPerformance 
                 WHERE ArtistID = Artist.ArtistID AND StartDateTime > NOW()
             ) AS EventCount
-        FROM Artist;
+            
+        FROM Artist 
+        WHERE ArtistID = %s;
     """
+
+def values(artist_id: UUID):
+    return (str(artist_id),)
