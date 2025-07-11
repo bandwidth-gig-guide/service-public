@@ -1,0 +1,27 @@
+services:
+  db-main:
+    image: ghcr.io/bandwidth-gig-guide/db-main:latest
+    container_name: db-main
+    networks:
+      - network-bandwidth
+    ports:
+      - "5432:5432"
+
+  service-venue:
+    build: .
+    container_name: service-public
+    networks:
+      - network-bandwidth
+    environment:
+      DB_HOST: ${DB_HOST:-db-main}
+      DB_USER: ${DB_USER:-root}
+      DB_PASSWORD: ${DB_PASSWORD:-password}
+      DB_NAME: ${DB_NAME:-db-main}
+    ports:
+      - "80:80"
+    depends_on:
+      - db-main
+
+networks:
+  network-bandwidth:
+    driver: bridge
