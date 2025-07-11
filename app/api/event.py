@@ -1,0 +1,33 @@
+from fastapi import APIRouter
+
+from uuid import UUID
+from app.model.event_brief import EventBrief
+from app.model.event import Event
+
+from app.rest.event.get_brief import get_brief
+from app.rest.event.get_all_brief import get_all_brief
+from app.rest.event.get import get_complete
+from app.rest.event.get_all_id import get_all_id
+
+
+event = APIRouter()
+
+# GET Single brief
+@event.get("/brief/{event_id}", response_model=EventBrief)
+def get_brief_(event_id: UUID):
+    return get_brief(event_id)
+
+# GET All briefs
+@event.get("/brief", response_model=list[EventBrief])
+def get_all_brief_():
+    return get_all_brief()
+
+# GET Single Complete
+@event.get("/{event_id}", response_model=Event)
+def get_complete_(event_id: UUID):
+    return get_complete(event_id)
+
+# GET IDs
+@event.get("/", response_model=list[UUID])
+def get_all_id_():
+    return get_all_id()

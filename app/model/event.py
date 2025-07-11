@@ -1,0 +1,42 @@
+from pydantic import BaseModel, HttpUrl
+from typing import Optional, List
+from uuid import UUID
+from datetime import datetime
+from app.model.event_price import EventPrice
+from app.model.event_venue import EventVenue
+from app.model.event_performance import EventPerformance
+from app.model.social import Social
+
+class Event(BaseModel):
+    EventID: UUID
+    Title: str
+    StartDateTime: datetime
+    Description: str
+    OriginalPostURL: HttpUrl
+    TicketSaleURL: HttpUrl
+    IsFeatured: bool
+    ImageURLs: Optional[List[HttpUrl]] = None
+    Socials: Optional[List[Social]] = None
+    Types: Optional[List[str]] = None
+    Tags: Optional[List[str]] = None
+    Venue: EventVenue
+    Performances: List[EventPerformance]
+    Prices: List[EventPrice]
+
+def format(tuple: tuple) -> Event:
+    return Event (
+        EventID = tuple[0],
+        Title = tuple[1],
+        StartDateTime = tuple[2],
+        Description = tuple[3],
+        OriginalPostURL = tuple[4],
+        TicketSaleURL = tuple[5],
+        IsFeatured = tuple[6],
+        ImageURLs = tuple[7],
+        Socials = tuple[8],
+        Types = tuple[9],
+        Tags = tuple[10],
+        Venue = tuple[11],
+        Performances = tuple[12],
+        Prices = tuple[13]
+    )
