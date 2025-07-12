@@ -25,13 +25,13 @@ def query():
             ) AS IsFeatured,
 
             (
-                SELECT URL 
+                SELECT Url 
                 FROM Image 
                 JOIN EventImage ON Image.ImageID = EventImage.ImageID 
                 WHERE EventImage.EventID = Event.EventID 
                 ORDER BY DisplayOrder ASC 
                 LIMIT 1
-            ) AS ImageURL,
+            ) AS ImageUrl,
 
             (
                 SELECT json_agg(Title ORDER BY SetListPosition ASC)

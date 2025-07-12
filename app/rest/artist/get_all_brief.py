@@ -20,13 +20,13 @@ def query():
             ) AS IsFeatured,
 
             (
-                SELECT URL 
+                SELECT Url 
                 FROM Image 
                 JOIN ArtistImage ON Image.ImageID = ArtistImage.ImageID 
                 WHERE ArtistImage.ArtistID = Artist.ArtistID 
                 ORDER BY DisplayOrder ASC 
                 LIMIT 1
-            ) AS ImageURL,
+            ) AS ImageUrl,
             
             (
                 SELECT COUNT(*) 

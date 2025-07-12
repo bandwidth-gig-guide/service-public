@@ -8,7 +8,7 @@ class ArtistBrief(BaseModel):
     Country: str
     City: str
     IsFeatured: bool
-    ImageURL: Optional[HttpUrl] = None
+    ImageUrl: Optional[HttpUrl] = None
     UpcomingEvents: int
 
 def format(tuple: tuple) -> ArtistBrief:
@@ -18,6 +18,6 @@ def format(tuple: tuple) -> ArtistBrief:
         Country = tuple[2],
         City = tuple[3],
         IsFeatured = tuple[4],
-        ImageURL = tuple[5],
+        ImageUrl = tuple[5],
         UpcomingEvents = tuple[6]
     )

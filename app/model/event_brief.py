@@ -9,7 +9,7 @@ class EventBrief(BaseModel):
     StartDateTime: datetime
     VenueTitle: str
     IsFeatured: bool
-    ImageURL: Optional[HttpUrl] = None
+    ImageUrl: Optional[HttpUrl] = None
     ArtistTitles: List[str]
     MinPrice: int
 
@@ -20,7 +20,7 @@ def format(tuple: tuple) -> EventBrief:
         StartDateTime = tuple[2],
         VenueTitle = tuple[3],
         IsFeatured = tuple[4],
-        ImageURL = tuple[5],
+        ImageUrl = tuple[5],
         ArtistTitles = tuple[6],
         MinPrice = tuple[7]
     )

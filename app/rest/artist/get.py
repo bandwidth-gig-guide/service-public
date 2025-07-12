@@ -16,8 +16,8 @@ def query():
             Artist.StateCode,
             Artist.YearFounded,
             Artist.Description,
-            Artist.SpotifyEmbedURL,
-            Artist.YoutubeEmbedURL,
+            Artist.SpotifyEmbedUrl,
+            Artist.YoutubeEmbedUrl,
 
             EXISTS(
                 SELECT 1 
@@ -26,17 +26,17 @@ def query():
             ) AS isFeatured,
 
             (
-                SELECT json_agg(Image.URL ORDER BY ArtistImage.DisplayOrder ASC)
+                SELECT json_agg(Image.Url ORDER BY ArtistImage.DisplayOrder ASC)
                 FROM Image
                 JOIN ArtistImage ON Image.ImageID = ArtistImage.ImageID
                 WHERE ArtistImage.ArtistID = Artist.ArtistID
-            ) AS ImageURLs,
+            ) AS ImageUrls,
 
             (
                 SELECT json_agg(json_build_object(
                     'SocialPlatform', SocialPlatform,
                     'Handle', Handle,
-                    'URL', URL
+                    'Url', Url
                 ))
                 FROM ArtistSocial
                 WHERE ArtistSocial.ArtistID = Artist.ArtistID

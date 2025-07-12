@@ -5,4 +5,4 @@ class EventVenue(BaseModel):
     VenueID: UUID
     Title: str
     StageTitle: str
-    ImageURL: HttpUrl
+    ImageUrl: HttpUrl

@@ -11,10 +11,10 @@ class Artist(BaseModel):
     StateCode: str
     YearFounded: int
     Description: str
-    SpotifyEmbedURL: Optional[HttpUrl] = None
-    YoutubeEmbedURL: Optional[HttpUrl] = None
+    SpotifyEmbedUrl: Optional[HttpUrl] = None
+    YoutubeEmbedUrl: Optional[HttpUrl] = None
     IsFeatured: bool
-    ImageURLs: Optional[List[HttpUrl]] = None
+    ImageUrls: Optional[List[HttpUrl]] = None
     Socials: Optional[List[Social]] = None
     Types: Optional[List[str]] = None
     Tags: Optional[List[str]] = None
@@ -29,8 +29,8 @@ def format(tuple: tuple) -> Artist:
         StateCode = tuple[4],
         YearFounded = tuple[5],
         Description = tuple[6],
-        SpotifyEmbedURL = tuple[7],
-        YoutubeEmbedURL = tuple[8],
+        SpotifyEmbedUrl = tuple[7],
+        YoutubeEmbedUrl = tuple[8],
         IsFeatured = tuple[9],
         ImageUrls = tuple[10] or [],
         Socials = tuple[11] or [],

@@ -23,13 +23,13 @@ def query():
             ) AS IsFeatured,
 
             (
-                SELECT URL 
+                SELECT Url 
                 FROM Image 
                 JOIN VenueImage ON Image.ImageID = VenueImage.ImageID 
                 WHERE VenueImage.VenueID = Venue.VenueID 
                 ORDER BY DisplayOrder ASC 
                 LIMIT 1
-            ) AS ImageURL,
+            ) AS ImageUrl,
 
             (
                 SELECT COUNT(*) 

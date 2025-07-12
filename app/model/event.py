@@ -12,10 +12,10 @@ class Event(BaseModel):
     Title: str
     StartDateTime: datetime
     Description: str
-    OriginalPostURL: HttpUrl
-    TicketSaleURL: HttpUrl
+    OriginalPostUrl: HttpUrl
+    TicketSaleUrl: HttpUrl
     IsFeatured: bool
-    ImageURLs: Optional[List[HttpUrl]] = None
+    ImageUrls: Optional[List[HttpUrl]] = None
     Socials: Optional[List[Social]] = None
     Types: Optional[List[str]] = None
     Tags: Optional[List[str]] = None
@@ -29,10 +29,10 @@ def format(tuple: tuple) -> Event:
         Title = tuple[1],
         StartDateTime = tuple[2],
         Description = tuple[3],
-        OriginalPostURL = tuple[4],
-        TicketSaleURL = tuple[5],
+        OriginalPostUrl = tuple[4],
+        TicketSaleUrl = tuple[5],
         IsFeatured = tuple[6],
-        ImageURLs = tuple[7],
+        ImageUrls = tuple[7],
         Socials = tuple[8],
         Types = tuple[9],
         Tags = tuple[10],

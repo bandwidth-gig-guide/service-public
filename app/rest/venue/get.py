@@ -16,9 +16,9 @@ def query():
             Venue.StreetAddress,
             Venue.PostCode,
             Venue.Description,
-            Venue.WebsiteURL,
+            Venue.WebsiteUrl,
             Venue.PhoneNumber,
-            ('http://www.googlemaps.com') AS GoogleMapsEmbedURL,
+            ('http://www.googlemaps.com') AS GoogleMapsEmbedUrl,
 
             EXISTS(
                 SELECT 1 
@@ -27,17 +27,17 @@ def query():
             ) AS isFeatured,
 
             (
-                SELECT json_agg(Image.URL ORDER BY VenueImage.DisplayOrder ASC)
+                SELECT json_agg(Image.Url ORDER BY VenueImage.DisplayOrder ASC)
                 FROM Image
                 JOIN VenueImage ON Image.ImageID = VenueImage.ImageID
                 WHERE VenueImage.VenueID = Venue.VenueID
-            ) AS ImageURLs,
+            ) AS ImageUrls,
 
             (
                 SELECT json_agg(json_build_object(
                     'SocialPlatform', SocialPlatform,
                     'Handle', Handle,
-                    'URL', URL
+                    'Url', Url
                 ))
                 FROM VenueSocial
                 WHERE VenueSocial.VenueID = Venue.VenueID

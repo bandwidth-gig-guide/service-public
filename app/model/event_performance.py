@@ -5,6 +5,6 @@ from datetime import datetime
 class EventPerformance(BaseModel):
     ArtistID: UUID
     Title: str
-    ImageURL: HttpUrl
+    ImageUrl: HttpUrl
     SetListPosition: int
     StartDateTime: datetime

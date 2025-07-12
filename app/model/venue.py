@@ -13,11 +13,11 @@ class Venue(BaseModel):
     StateCode: str
     PostCode: int
     Description: str
-    WebsiteURL: HttpUrl
+    WebsiteUrl: HttpUrl
     PhoneNumber: str
-    GoogleMapsEmbedURL: Optional[HttpUrl] = None
+    GoogleMapsEmbedUrl: Optional[HttpUrl] = None
     IsFeatured: bool
-    ImageURLs: Optional[List[HttpUrl]] = None
+    ImageUrls: Optional[List[HttpUrl]] = None
     Socials: Optional[List[Social]] = None
     Types: Optional[List[str]] = None
     Tags: Optional[List[str]] = None
@@ -33,11 +33,11 @@ def format(tuple: tuple) -> Venue:
         StreetAddress = tuple[4],
         PostCode = tuple[5],
         Description = tuple[6],
-        WebsiteURL = tuple[7],
+        WebsiteUrl = tuple[7],
         PhoneNumber = tuple[8],
-        GoogleMapsEmbedURL = tuple[9],
+        GoogleMapsEmbedUrl = tuple[9],
         IsFeatured = tuple[10],
-        ImageURLs = tuple[11] or [],
+        ImageUrls = tuple[11] or [],
         Socials = tuple[12] or [],
         Types = tuple[13] or [],
         Tags = tuple[14] or [],

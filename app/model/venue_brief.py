@@ -10,7 +10,7 @@ class VenueBrief(BaseModel):
     StateCode: str
     PostCode: int
     IsFeatured: bool
-    ImageURL: Optional[HttpUrl] = None
+    ImageUrl: Optional[HttpUrl] = None
     UpcomingEventCount: int
 
 def format(tuple: tuple) -> VenueBrief:
@@ -22,6 +22,6 @@ def format(tuple: tuple) -> VenueBrief:
         StateCode = tuple[4],
         PostCode = tuple[5],
         IsFeatured = tuple[6],
-        ImageURL = tuple[7],
+        ImageUrl = tuple[7],
         UpcomingEventCount = tuple[8]
     )

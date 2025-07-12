@@ -13,8 +13,8 @@ def query():
             Event.Title,
             Event.StartDateTime,
             Event.Description,
-            Event.OriginalPostURL,
-            Event.TicketSaleURL,
+            Event.OriginalPostUrl,
+            Event.TicketSaleUrl,
 
             EXISTS(
                 SELECT 1 
@@ -24,19 +24,19 @@ def query():
 
             (
                 SELECT json_agg(
-                    Image.URL 
+                    Image.Url 
                     ORDER BY EventImage.DisplayOrder ASC
                 )
                 FROM Image
                 JOIN EventImage ON Image.ImageID = EventImage.ImageID
                 WHERE EventImage.EventID = Event.EventID
-            ) AS ImageURLs,
+            ) AS ImageUrls,
 
             (
                 SELECT json_agg(json_build_object(
                     'SocialPlatform', SocialPlatform,
                     'Handle', Handle,
-                    'URL', URL
+                    'Url', Url
                 ))
                 FROM EventSocial
                 WHERE EventSocial.EventID = Event.EventID
@@ -59,8 +59,8 @@ def query():
                     'VenueID', Venue.VenueID,
                     'Title', Venue.Title,
                     'StageTitle', VenueStage.Title,
-                    'ImageURL', (
-                        SELECT Image.URL
+                    'ImageUrl', (
+                        SELECT Image.Url
                         FROM VenueImage
                         JOIN Image ON Image.ImageID = VenueImage.ImageID
                         WHERE VenueImage.VenueID = Venue.VenueID
@@ -79,8 +79,8 @@ def query():
                     json_build_object(
                         'ArtistID', EventPerformance.ArtistID,
                         'Title', Artist.Title,
-                        'ImageURL', (
-                            SELECT Image.URL
+                        'ImageUrl', (
+                            SELECT Image.Url
                             FROM ArtistImage
                             JOIN Image ON Image.ImageID = ArtistImage.ImageID
                             WHERE ArtistImage.ArtistID = Artist.ArtistID
