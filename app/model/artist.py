@@ -32,7 +32,7 @@ def format(tuple: tuple) -> Artist:
         SpotifyEmbedURL = tuple[7],
         YoutubeEmbedURL = tuple[8],
         IsFeatured = tuple[9],
-        Images = tuple[10] or [],
+        ImageUrls = tuple[10] or [],
         Socials = tuple[11] or [],
         Types = tuple[12] or [],
         Tags = tuple[13] or [],

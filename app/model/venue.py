@@ -37,7 +37,7 @@ def format(tuple: tuple) -> Venue:
         PhoneNumber = tuple[8],
         GoogleMapsEmbedURL = tuple[9],
         IsFeatured = tuple[10],
-        Images = tuple[11] or [],
+        ImageURLs = tuple[11] or [],
         Socials = tuple[12] or [],
         Types = tuple[13] or [],
         Tags = tuple[14] or [],
