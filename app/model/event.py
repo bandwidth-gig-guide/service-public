@@ -32,11 +32,11 @@ def format(tuple: tuple) -> Event:
         OriginalPostUrl = tuple[4],
         TicketSaleUrl = tuple[5],
         IsFeatured = tuple[6],
-        ImageUrls = tuple[7],
-        Socials = tuple[8],
-        Types = tuple[9],
-        Tags = tuple[10],
+        ImageUrls = tuple[7] or [],
+        Socials = tuple[8] or [],
+        Types = tuple[9] or [],
+        Tags = tuple[10] or [],
         Venue = tuple[11],
-        Performances = tuple[12],
-        Prices = tuple[13]
+        Performances = tuple[12] or [],
+        Prices = tuple[13] or []
     )
