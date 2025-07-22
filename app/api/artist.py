@@ -1,5 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
+from typing import Optional
 from uuid import UUID
 from app.model.artist_brief import ArtistBrief
 from app.model.artist import Artist
@@ -27,7 +28,21 @@ def get_all_brief_():
 def get_complete_(artist_id: UUID):
     return get_complete(artist_id)
 
-# GET IDs
+# GET IDs | Filterable
 @artist.get("/", response_model=list[UUID])
-def get_all_id_():
-    return get_all_id()
+def get_all_id_(
+    name: Optional[str] = None,
+    country: Optional[str] = None,
+    city: Optional[str] = None,
+    types: Optional[list[str]] = Query(default=None),
+    tags: Optional[list[str]] = Query(default=None),
+    hasUpcomingPerformance: Optional[bool] = None,
+):
+    return get_all_id(
+        name=name,
+        country=country,
+        city=city,
+        types=types,
+        tags=tags,
+        hasUpcomingPerformance=hasUpcomingPerformance,
+    )
