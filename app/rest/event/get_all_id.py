@@ -7,7 +7,8 @@ from app.util.list_to_array_string import list_to_array_string
 
 def get_all_id(
     name: Optional[str] = None,
-    city: Optional[str] = None,
+    stateCode: Optional[str] = None,
+    city: Optional[List[str]] = None,
     maxPrice: Optional[int] = None,
     types: Optional[List[str]] = None,
     tags: Optional[List[str]] = None,
@@ -16,6 +17,7 @@ def get_all_id(
     
     query, params = prepare(
         name=name,
+        stateCode=stateCode,
         city=city,
         maxPrice=maxPrice,
         types=types,
@@ -28,7 +30,8 @@ def get_all_id(
 
 def prepare(
     name: Optional[str] = None,
-    city: Optional[str] = None,
+    stateCode: Optional[str] = None,
+    city: Optional[List[str]] = None,
     maxPrice: Optional[int] = None,
     types: Optional[List[str]] = None,
     tags: Optional[List[str]] = None,
@@ -48,9 +51,25 @@ def prepare(
         filters.append("Event.Title ILIKE %s")
         params.append(f"%{name}")
 
+    if stateCode:
+        filters.append("""
+            EXISTS (
+                SELECT 1 FROM Venue
+                WHERE Venue.StateCode = %s
+                AND Venue.VenueID = Event.VenueID
+            )
+        """)
+        params.append(stateCode)
+
     if city:
-        filters.append("Event.City = %s")
-        params.append(city)
+        filters.append("""
+            EXISTS (
+                SELECT 1 FROM Venue
+                WHERE Venue.City = ANY(%s)
+                AND Venue.VenueID = Event.VenueID
+            )
+        """)
+        params.append(list_to_array_string(city))
 
     if maxPrice is not None:
         filters.append("""
@@ -61,6 +80,7 @@ def prepare(
             )
         """)
         params.append(maxPrice)
+
 
     if types:
         filters.append("""
@@ -96,3 +116,4 @@ def prepare(
         query += " AND " + " AND ".join(filters)
 
     return query, params
+    
