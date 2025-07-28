@@ -35,13 +35,6 @@ def prepare(
     dates: Optional[List[date]] = None
 ) -> Tuple[str, list]:
     
-    print("NAME: ", name)
-    print("CITY: ", city)
-    print("MAXPRICE: ", maxPrice)
-    print("TYPES: ", types)
-    print("TAGS: ", tags)
-    print("DATES: ", dates)
-    
     query = """
         SELECT EventID 
         FROM Event
@@ -101,8 +94,5 @@ def prepare(
 
     if filters:
         query += " AND " + " AND ".join(filters)
-
-    print("QUERY:", query)
-    print("PARAMS:", params)
 
     return query, params
