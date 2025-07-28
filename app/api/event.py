@@ -1,6 +1,8 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
+from typing import Optional
 from uuid import UUID
+from datetime import date
 from app.model.event_brief import EventBrief
 from app.model.event import Event
 
@@ -29,5 +31,19 @@ def get_complete_(event_id: UUID):
 
 # GET IDs
 @event.get("/", response_model=list[UUID])
-def get_all_id_():
-    return get_all_id()
+def get_all_id_(
+    name: Optional[str] = None,
+    city: Optional[str] = None,
+    maxPrice: Optional[int] = None,
+    types: Optional[list[str]] = Query(default=None),
+    tags: Optional[list[str]] = Query(default=None),
+    dates: Optional[list[date]] = Query(default=None)
+):
+    return get_all_id(
+        name=name,
+        city=city,
+        maxPrice=maxPrice,
+        types=types,
+        tags=tags,
+        dates=dates
+    )
