@@ -49,7 +49,7 @@ def prepare(
 
     if name:
         filters.append("Event.Title ILIKE %s")
-        params.append(f"%{name}")
+        params.append(f"%{name}%")
 
     if stateCode:
         filters.append("""
