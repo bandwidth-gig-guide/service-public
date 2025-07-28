@@ -1,5 +1,6 @@
-from fastapi import APIRouter
+from fastapi import APIRouter, Query
 
+from typing import Optional
 from uuid import UUID
 from app.model.venue_brief import VenueBrief
 from app.model.venue import Venue
@@ -29,5 +30,17 @@ def get_complete_(venue_id: UUID):
 
 # GET IDs
 @venue.get("/", response_model=list[UUID])
-def get_all_id_():
-    return get_all_id()
+def get_all_id_(
+    name: Optional[str] = None,
+    stateCode: Optional[str] = None,
+    city: Optional[list[str]] = Query(default=None),
+    types: Optional[list[str]] = Query(default=None),
+    tags: Optional[list[str]] = Query(default=None)
+):
+    return get_all_id(
+        name=name,
+        stateCode=stateCode,
+        city=city,
+        types=types,
+        tags=tags
+    )
