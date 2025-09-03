@@ -18,7 +18,7 @@ def query():
             Venue.Description,
             Venue.WebsiteUrl,
             Venue.PhoneNumber,
-            ('http://www.googlemaps.com') AS GoogleMapsEmbedUrl,
+            Venue.GoogleMapsEmbedURL AS GoogleMapsEmbedUrl,
 
             EXISTS(
                 SELECT 1 
