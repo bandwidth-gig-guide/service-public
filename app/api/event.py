@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Query
 
-from typing import Optional
+from typing import Optional, List, Dict
 from uuid import UUID
 from datetime import date
 from app.model.event_brief import EventBrief
@@ -10,6 +10,7 @@ from app.rest.event.get_brief import get_brief
 from app.rest.event.get_all_brief import get_all_brief
 from app.rest.event.get import get_complete
 from app.rest.event.get_all_id import get_all_id
+from app.rest.event.get_all_id_by_date import get_all_id_by_date
 
 
 event = APIRouter()
@@ -23,6 +24,27 @@ def get_brief_(event_id: UUID):
 @event.get("/brief", response_model=list[EventBrief])
 def get_all_brief_():
     return get_all_brief()
+
+# GET IDs Grouped By Date
+@event.get("/by-date", response_model=Dict[date, List[UUID]])
+def get_all_id__by_date_(
+    name: Optional[str] = None,
+    stateCode: Optional[str] = None,
+    city: Optional[list[str]] = Query(default=None),
+    maxPrice: Optional[int] = None,
+    types: Optional[list[str]] = Query(default=None),
+    tags: Optional[list[str]] = Query(default=None),
+    dates: Optional[list[date]] = Query(default=None)
+):
+    return get_all_id_by_date(
+        name=name,
+        stateCode=stateCode,
+        city=city,
+        maxPrice=maxPrice,
+        types=types,
+        tags=tags,
+        dates=dates
+    )
 
 # GET Single Complete
 @event.get("/{event_id}", response_model=Event)
