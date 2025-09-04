@@ -7,7 +7,7 @@ services:
     ports:
       - "5432:5432"
 
-  service-venue:
+  service-public:
     build: .
     container_name: service-public
     networks:
