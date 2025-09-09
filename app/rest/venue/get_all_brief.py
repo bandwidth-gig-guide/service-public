@@ -31,7 +31,7 @@ def query():
             ) AS ImageUrl,
 
             (
-                SELECT COUNT(*) 
+                SELECT COUNT(DISTINCT EventID) 
                 FROM EventPerformance 
                 WHERE VenueID = Venue.VenueID AND StartDateTime > NOW()
             ) AS EventCount
