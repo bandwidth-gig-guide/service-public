@@ -8,6 +8,7 @@ from app.model.event import Event
 
 from app.rest.event.get_brief import get_brief
 from app.rest.event.get_all_brief import get_all_brief
+from app.rest.event.get_recommended import get_recommended
 from app.rest.event.get import get_complete
 from app.rest.event.get_all_id import get_all_id
 from app.rest.event.get_all_id_by_date import get_all_id_by_date
@@ -24,6 +25,11 @@ def get_brief_(event_id: UUID):
 @event.get("/brief", response_model=list[EventBrief])
 def get_all_brief_():
     return get_all_brief()
+
+# GET Recommended
+@event.get("/recommended/{event_id}", response_model=list[UUID])
+def get_recommended_(event_id: UUID):
+    return get_recommended(event_id)
 
 # GET IDs Grouped By Date
 @event.get("/by-date", response_model=Dict[date, List[UUID]])
