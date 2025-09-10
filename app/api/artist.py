@@ -9,6 +9,7 @@ from app.rest.artist.get_brief import get_brief
 from app.rest.artist.get_all_brief import get_all_brief
 from app.rest.artist.get import get_complete
 from app.rest.artist.get_all_id import get_all_id
+from app.rest.artist.get_recommended import get_recommended
 
 
 artist = APIRouter()
@@ -22,6 +23,11 @@ def get_brief_(artist_id: UUID):
 @artist.get("/brief", response_model=list[ArtistBrief])
 def get_all_brief_():
     return get_all_brief()
+
+# GET Recommended
+@artist.get("/recommended/{artist_id}", response_model=list[UUID])
+def get_recommended_(artist_id: UUID):
+    return get_recommended(artist_id)
 
 # GET Single Complete
 @artist.get("/{artist_id}", response_model=Artist)
