@@ -27,9 +27,8 @@ def query():
             SELECT Event.EventID
             FROM Event
             WHERE Event.EventID != %s
-            AND DATE(Event.StartDateTime) = (SELECT DATE(StartDateTime) FROM Event WHERE EventID = %s)
             AND Event.StartDateTime > NOW()
-            ORDER BY RANDOM()
+            ORDER BY Event.StartDateTime, RANDOM()
             LIMIT 8
         )
 
@@ -64,4 +63,4 @@ def query():
     """
 
 def value(event_id: UUID):
-    return (str(event_id), str(event_id), str(event_id), str(event_id), str(event_id), str(event_id))
+    return (str(event_id), str(event_id), str(event_id), str(event_id), str(event_id))
