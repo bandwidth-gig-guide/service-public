@@ -41,17 +41,22 @@ def query():
                 WHERE EventPerformance.EventID = Event.EventID
             ) AS ArtistTitles,
 
-            (
-                SELECT Price
-                FROM EventPrice
-                WHERE EventPrice.EventID = Event.EventID
-                ORDER BY Price ASC
-                LIMIT 1
+            COALESCE(
+                (
+                    SELECT Price
+                    FROM EventPrice
+                    WHERE EventPrice.EventID = Event.EventID
+                    ORDER BY Price ASC
+                    LIMIT 1
+                ), 1 
             ) AS MinPrice
             
         FROM Event 
         WHERE EventID = %s;
     """
+
+# Default MinPrice is $1. Means it doesn't get filtered when a max price is set, but it also
+# doesn't show up in 'Free Event' searches.
 
 def values(event_id: UUID):
     return (str(event_id),)
