@@ -8,6 +8,7 @@ from app.model.venue import Venue
 from app.rest.venue.get_brief import get_brief
 from app.rest.venue.get_all_brief import get_all_brief
 from app.rest.venue.get_recommended import get_recommended
+from app.rest.venue.get_cities import get_cities
 from app.rest.venue.get import get_complete
 from app.rest.venue.get_all_id import get_all_id
 
@@ -28,6 +29,11 @@ def get_all_brief_():
 @venue.get("/recommended/{venue_id}", response_model=list[UUID])
 def get_recommended_(venue_id: UUID):
     return get_recommended(venue_id)
+
+# GET All Cities
+@venue.get("/cities", response_model=list[str])
+def get_cities_():
+    return get_cities()
 
 # GET Single Complete
 @venue.get("/{venue_id}", response_model=Venue)
