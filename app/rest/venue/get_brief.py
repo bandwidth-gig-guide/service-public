@@ -33,7 +33,7 @@ def query():
 
             (
                 SELECT COUNT(DISTINCT EventID) 
-                FROM EventPerformance 
+                FROM Event 
                 WHERE VenueID = Venue.VenueID AND StartDateTime > NOW()
             ) AS UpcomingEventCount
 
