@@ -4,6 +4,6 @@ def get_cities() -> list[str]:
     rows = execute(query)
     return [row[0] for row in rows]
 
-query = "SELECT DISTINCT City FROM Venue;"
+query = "SELECT DISTINCT City FROM Venue ORDER BY City ASC;"
 
 
