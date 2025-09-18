@@ -45,12 +45,7 @@ def prepare(
         params.append(stateCode)
 
     if city:
-        filters.append("""
-            EXISTS (
-                SELECT 1 FROM Venue
-                WHERE Venue.City = ANY(%s)
-            )
-        """)
+        filters.append("Venue.City = ANY(%s)")
         params.append(list_to_array_string(city))
 
     if types:
