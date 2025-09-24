@@ -5,6 +5,8 @@ from app.api.artist import artist
 from app.api.event import event
 from app.api.venue import venue
 
+from app.util.test_db_connection import test_db_connection
+
 from app.core.handle.exception import handle_exception
 from app.core.handle.http_exception import handle_http_exception
 
@@ -19,3 +21,8 @@ app.include_router(venue, prefix="/public/venue", tags=["venue"])
 # Handlers
 app.add_exception_handler(Exception, handle_exception)
 app.add_exception_handler(HTTPException, handle_http_exception)
+
+
+@app.on_event("startup")
+def on_startup():
+    test_db_connection()
