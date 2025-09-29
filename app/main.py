@@ -14,9 +14,9 @@ from app.core.handle.http_exception import handle_http_exception
 app = FastAPI()
 
 # Routes
-app.include_router(artist, prefix="/public/artist", tags=["artist"])
-app.include_router(event, prefix="/public/event", tags=["event"])
-app.include_router(venue, prefix="/public/venue", tags=["venue"])
+app.include_router(artist, prefix="/api/artist", tags=["artist"])
+app.include_router(event, prefix="/api/event", tags=["event"])
+app.include_router(venue, prefix="/api/venue", tags=["venue"])
 
 # Handlers
 app.add_exception_handler(Exception, handle_exception)
