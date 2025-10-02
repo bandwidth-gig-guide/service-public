@@ -1,0 +1,57 @@
+name: Build, Publish and Deploy Production Image
+
+permissions:
+  packages: write
+  contents: read
+
+env:
+  CONTAINER_NAME: service-public
+  TAG: latest
+  REGISTRY: ghcr.io
+  ORG: bandwidth-gig-guide
+  PATH_TO_DOCKER_COMPOSE_FOLDER: deployment/
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-publish:
+    name: Build and Publish Docker Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ env.REGISTRY }}/${{ env.ORG }}/${{ env.CONTAINER_NAME }}:${{ env.TAG }} .
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v2
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Push Docker image
+        run: |
+          docker push ${{ env.REGISTRY }}/${{ env.ORG }}/${{ env.CONTAINER_NAME }}:${{ env.TAG }}
+
+  deploy:
+    name: Deploy to VM
+    runs-on: ubuntu-latest
+    needs: build-and-publish
+    steps:
+      - name: Deploy via SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.DO_HOST }}
+          username: ${{ secrets.DO_USER }}
+          key: ${{ secrets.DO_SSH_KEY }}
+          script: |
+            cd ${{ env.PATH_TO_DOCKER_COMPOSE_FOLDER }}
+            docker compose pull ${{ env.CONTAINER_NAME }}
+            docker compose up -d --remove-orphans ${{ env.CONTAINER_NAME }}
+            docker image prune -af || true
