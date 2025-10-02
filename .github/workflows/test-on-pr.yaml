@@ -1,0 +1,26 @@
+name: Test Docker Build on PR
+
+permissions:
+  contents: read
+
+on:
+  pull_request:
+
+jobs:
+  test:
+    name: Test Docker Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Build Docker image
+        run: docker build -t test-image .
+
+      - name: Test Docker image
+        run: |
+          docker run -d --name test test-image
+          sleep 5
+          if ! docker ps | grep test; then
+            echo "Container failed to start!" && exit 1
+          fi
