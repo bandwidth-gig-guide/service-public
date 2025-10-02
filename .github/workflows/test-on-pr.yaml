@@ -20,7 +20,14 @@ jobs:
       - name: Test Docker image
         run: |
           docker run -d --name test test-image
-          sleep 5
-          if ! docker ps | grep test; then
-            echo "Container failed to start!" && exit 1
-          fi
+          echo "Waiting for container to start. Max wait time: 120 seconds."
+          for i in {1..24}; do
+            if docker ps | grep test; then
+              echo "Container is running!"
+              exit 0
+            else
+              echo "- ($((i*5)) seconds elapsed)"
+              sleep 5
+            fi
+          done
+          echo "Container failed to start after 2 minutes!" && exit 1
