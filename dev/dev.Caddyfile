@@ -1,0 +1,9 @@
+{
+	storage file_system /data
+}
+
+localhost {
+    handle_path /* {
+        reverse_proxy service-public:80
+    }
+}

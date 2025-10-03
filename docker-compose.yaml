@@ -2,26 +2,52 @@ services:
   db-main:
     image: ghcr.io/bandwidth-gig-guide/db-main:latest
     container_name: db-main
-    networks:
-      - network-bandwidth
+    restart: unless-stopped
+    env_file:
+      - ./dev/dev.env
+    volumes:
+      - db-main-data:/var/lib/postgresql/data
     ports:
       - "5432:5432"
+    networks:
+      - bandwidth
 
   service-public:
-    build: .
+    build: 
+      context: .
+      dockerfile: ./dev/dev.Dockerfile
     container_name: service-public
-    networks:
-      - network-bandwidth
-    environment:
-      DB_HOST: ${DB_HOST:-db-main}
-      DB_USER: ${DB_USER:-root}
-      DB_PASSWORD: ${DB_PASSWORD:-password}
-      DB_NAME: ${DB_NAME:-db-main}
-    ports:
-      - "80:80"
+    restart: unless-stopped
+    env_file:
+      - ./dev/dev.env
+    volumes:
+      - ./app:/code/app
     depends_on:
       - db-main
+    networks:
+      - bandwidth
+
+  reverse-proxy:
+    image: caddy:2-alpine
+    container_name: reverse-proxy
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - reverse-proxy-data:/data
+      - reverse-proxy-config:/config
+      - ./dev/dev.Caddyfile:/etc/caddy/Caddyfile
+    depends_on:
+      - service-public
+    networks:
+      - bandwidth
 
 networks:
-  network-bandwidth:
+  bandwidth:
     driver: bridge
+
+volumes:
+  db-main-data:
+  reverse-proxy-data:
+  reverse-proxy-config:
