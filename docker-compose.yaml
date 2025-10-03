@@ -39,7 +39,7 @@ services:
       - reverse-proxy-config:/config
       - ./dev/dev.Caddyfile:/etc/caddy/Caddyfile
     depends_on:
-      - service-admin
+      - service-public
     networks:
       - bandwidth
 
