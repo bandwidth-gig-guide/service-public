@@ -10,6 +10,7 @@ def get_all_id(
     city: Optional[List[str]] = None,
     types: Optional[List[str]] = None,
     tags: Optional[List[str]] = None,
+    hasUpcomingEvent: Optional[bool] = None
 ) -> list[UUID]:
     
     query, params = prepare(
@@ -17,7 +18,8 @@ def get_all_id(
         stateCode=stateCode,
         city=city,
         types=types,
-        tags=tags
+        tags=tags,
+        hasUpcomingEvent=hasUpcomingEvent
     )
     rows = execute(query, params)
     return [row[0] for row in rows]
@@ -29,6 +31,7 @@ def prepare(
     city: Optional[List[str]] = None,
     types: Optional[List[str]] = None,
     tags: Optional[List[str]] = None,
+    hasUpcomingEvent: Optional[bool] = None
 ) -> Tuple[str, list]:
     
     query = "SELECT VenueID FROM Venue"
@@ -67,6 +70,16 @@ def prepare(
             )
         """)
         params.append(list_to_array_string(tags))
+
+    if hasUpcomingEvent is not None:
+        filters.append(f"""
+            EXISTS (
+                SELECT 1 FROM Event
+                WHERE Event.VenueID = Venue.VenueID
+                AND Event.StartDateTime > NOW()
+            ) = %s
+        """)
+        params.append(hasUpcomingEvent)
 
     if filters:
         query += " WHERE " + " AND ".join(filters)

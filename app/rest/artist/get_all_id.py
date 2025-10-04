@@ -10,7 +10,7 @@ def get_all_id(
     city: Optional[str] = None,
     types: Optional[List[str]] = None,
     tags: Optional[List[str]] = None,
-    hasUpcomingPerformance: Optional[bool] = None
+    hasUpcomingEvent: Optional[bool] = None
 ) -> list[UUID]:
 
     query, params = prepare(
@@ -19,7 +19,7 @@ def get_all_id(
         city=city,
         types=types,
         tags=tags,
-        hasUpcomingPerformance=hasUpcomingPerformance
+        hasUpcomingEvent=hasUpcomingEvent
     )
     rows = execute(query, params)
     return [row[0] for row in rows]
@@ -31,7 +31,7 @@ def prepare(
     city: Optional[str] = None,
     types: Optional[List[str]] = None,
     tags: Optional[List[str]] = None,
-    hasUpcomingPerformance: Optional[bool] = None
+    hasUpcomingEvent: Optional[bool] = None
 ) -> Tuple[str, list]:
 
     query = "SELECT Artist.ArtistID FROM Artist"
@@ -71,7 +71,7 @@ def prepare(
         """)
         params.append(list_to_array_string(tags))
 
-    if hasUpcomingPerformance is not None:
+    if hasUpcomingEvent is not None:
         filters.append(f"""
             EXISTS (
                 SELECT 1 FROM EventPerformance
@@ -79,7 +79,7 @@ def prepare(
                 AND EventPerformance.StartDateTime > NOW()
             ) = %s
         """)
-        params.append(hasUpcomingPerformance)
+        params.append(hasUpcomingEvent)
 
     if filters:
         query += " WHERE " + " AND ".join(filters)
