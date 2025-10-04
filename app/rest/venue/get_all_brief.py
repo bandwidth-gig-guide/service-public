@@ -31,5 +31,6 @@ def query():
                 WHERE VenueID = Venue.VenueID AND StartDateTime > NOW()
             ) AS EventCount
 
-        FROM Venue;
+        FROM Venue
+        ORDER BY Venue.IsFeatured DESC, Venue.Title ASC;
     """

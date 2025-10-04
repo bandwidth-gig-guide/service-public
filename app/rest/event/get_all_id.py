@@ -115,5 +115,7 @@ def prepare(
     if filters:
         query += " AND " + " AND ".join(filters)
 
+    query += " ORDER BY Event.IsFeatured DESC, Event.StartDateTime ASC;"
+
     return query, params
     

@@ -30,5 +30,6 @@ def query():
                 AND StartDateTime > NOW()
             ) AS EventCount
 
-        FROM Artist;
+        FROM Artist
+        ORDER BY Artist.IsFeatured DESC, Artist.Title ASC;
     """
