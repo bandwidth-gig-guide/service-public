@@ -14,12 +14,7 @@ def query():
             Venue.StreetAddress,
             Venue.StateCode,
             Venue.PostCode,
-
-            EXISTS(
-                SELECT 1 
-                FROM VenueFeatured 
-                WHERE VenueID = Venue.VenueID
-            ) AS IsFeatured,
+            Venue.IsFeatured,
 
             (
                 SELECT Url 
@@ -32,9 +27,10 @@ def query():
 
             (
                 SELECT COUNT(DISTINCT EventID) 
-                FROM EventPerformance 
+                FROM Event 
                 WHERE VenueID = Venue.VenueID AND StartDateTime > NOW()
             ) AS EventCount
 
-        FROM Venue;
+        FROM Venue
+        ORDER BY Venue.IsFeatured DESC, Venue.Title ASC;
     """

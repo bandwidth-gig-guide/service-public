@@ -71,4 +71,6 @@ def prepare(
     if filters:
         query += " WHERE " + " AND ".join(filters)
 
+    query += " ORDER BY Venue.IsFeatured DESC, Venue.Title ASC;"
+
     return query, params

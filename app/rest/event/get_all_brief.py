@@ -18,11 +18,7 @@ def query():
                 WHERE Venue.VenueID = Event.VenueID
             ) AS VenueTitle,
 
-            EXISTS(
-                SELECT 1 
-                FROM EventFeatured 
-                WHERE EventID = Event.EventID
-            ) AS IsFeatured,
+            Event.IsFeatured,
 
             (
                 SELECT Url 

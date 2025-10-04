@@ -23,6 +23,7 @@ def query():
             ORDER BY COUNT(*) DESC, RANDOM()
             LIMIT 8
         ),
+
         SameDayEvents AS (
             SELECT Event.EventID
             FROM Event
@@ -50,8 +51,8 @@ def query():
             (
                 SELECT Event.EventID
                 FROM Event
-                JOIN EventFeatured ON Event.EventID = EventFeatured.EventID
-                WHERE Event.EventID != %s
+                WHERE Event.IsFeatured = TRUE
+                AND Event.EventID != %s
                 AND Event.EventID NOT IN (SELECT EventID FROM SimilarEvents)
                 AND Event.EventID NOT IN (SELECT EventID FROM SameDayEvents)
                 ORDER BY RANDOM()
