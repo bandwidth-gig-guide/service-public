@@ -18,12 +18,7 @@ def query():
             Artist.Description,
             Artist.SpotifyEmbedUrl,
             Artist.YoutubeEmbedUrl,
-
-            EXISTS(
-                SELECT 1 
-                FROM ArtistFeatured 
-                WHERE ArtistID = Artist.ArtistID
-            ) AS isFeatured,
+            Artist.IsFeatured,
 
             (
                 SELECT json_agg(Image.Url ORDER BY ArtistImage.DisplayOrder ASC)

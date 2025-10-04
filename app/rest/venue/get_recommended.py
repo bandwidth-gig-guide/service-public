@@ -34,8 +34,8 @@ def query():
             (
                 SELECT Venue.VenueID
                 FROM Venue
-                JOIN VenueFeatured ON Venue.VenueID = VenueFeatured.VenueID
-                WHERE Venue.VenueID != %s
+                WHERE Venue.IsFeatured = TRUE
+                AND Venue.VenueID != %s
                 AND Venue.VenueID NOT IN (SELECT VenueID FROM SimilarVenues)
                 ORDER BY RANDOM()
                 LIMIT 2

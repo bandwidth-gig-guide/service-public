@@ -14,12 +14,7 @@ def query():
             Venue.StreetAddress,
             Venue.StateCode,
             Venue.PostCode,
-
-            EXISTS(
-                SELECT 1 
-                FROM VenueFeatured 
-                WHERE VenueID = Venue.VenueID
-            ) AS IsFeatured,
+            Venue.IsFeatured,
 
             (
                 SELECT Url 

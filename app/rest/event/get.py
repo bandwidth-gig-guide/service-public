@@ -15,12 +15,7 @@ def query():
             Event.Description,
             Event.OriginalPostUrl,
             Event.TicketSaleUrl,
-
-            EXISTS(
-                SELECT 1 
-                FROM EventFeatured 
-                WHERE EventID = Event.EventID
-            ) AS isFeatured,
+            Event.IsFeatured,
             
             (
                 SELECT json_agg(

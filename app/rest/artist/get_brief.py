@@ -13,12 +13,7 @@ def query():
             Artist.Title,
             Artist.Country,
             Artist.City,
-
-            EXISTS(
-                SELECT 1 
-                FROM ArtistFeatured 
-                WHERE ArtistID = Artist.ArtistID
-            ) AS IsFeatured,
+            Artist.IsFeatured,
 
             (
                 SELECT Url 
