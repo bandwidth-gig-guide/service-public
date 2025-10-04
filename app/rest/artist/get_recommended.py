@@ -34,8 +34,8 @@ def query():
             (
                 SELECT Artist.ArtistID
                 FROM Artist
-                JOIN ArtistFeatured ON Artist.ArtistID = ArtistFeatured.ArtistID
-                WHERE Artist.ArtistID != %s
+                WHERE Artist.IsFeatured = TRUE
+                AND Artist.ArtistID != %s
                 AND Artist.ArtistID NOT IN (SELECT ArtistID FROM SimilarArtists)
                 ORDER BY RANDOM()
                 LIMIT 4
