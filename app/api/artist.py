@@ -42,7 +42,7 @@ def get_all_id_(
     city: Optional[str] = None,
     types: Optional[list[str]] = Query(default=None),
     tags: Optional[list[str]] = Query(default=None),
-    hasUpcomingPerformance: Optional[bool] = None,
+    hasUpcomingEvent: Optional[bool] = None,
 ):
     return get_all_id(
         name=name,
@@ -50,5 +50,5 @@ def get_all_id_(
         city=city,
         types=types,
         tags=tags,
-        hasUpcomingPerformance=hasUpcomingPerformance,
+        hasUpcomingEvent=hasUpcomingEvent
     )
