@@ -47,12 +47,14 @@ def get_all_id_(
     stateCode: Optional[str] = None,
     city: Optional[list[str]] = Query(default=None),
     types: Optional[list[str]] = Query(default=None),
-    tags: Optional[list[str]] = Query(default=None)
+    tags: Optional[list[str]] = Query(default=None),
+    hasUpcomingEvent: Optional[bool] = None,
 ):
     return get_all_id(
         name=name,
         stateCode=stateCode,
         city=city,
         types=types,
-        tags=tags
+        tags=tags,
+        hasUpcomingEvent=hasUpcomingEvent
     )
