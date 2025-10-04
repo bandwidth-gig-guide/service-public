@@ -23,6 +23,7 @@ def query():
             ORDER BY COUNT(*) DESC, RANDOM()
             LIMIT 8
         ),
+
         SameDayEvents AS (
             SELECT Event.EventID
             FROM Event
