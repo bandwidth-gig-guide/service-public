@@ -49,6 +49,7 @@ def get_all_id_(
     types: Optional[list[str]] = Query(default=None),
     tags: Optional[list[str]] = Query(default=None),
     hasUpcomingEvent: Optional[bool] = None,
+    isMonitored: Optional[bool] = None,
 ):
     return get_all_id(
         name=name,
@@ -56,5 +57,6 @@ def get_all_id_(
         city=city,
         types=types,
         tags=tags,
-        hasUpcomingEvent=hasUpcomingEvent
+        hasUpcomingEvent=hasUpcomingEvent,
+        isMonitored=isMonitored
     )
