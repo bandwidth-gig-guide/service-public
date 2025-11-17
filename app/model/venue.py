@@ -17,6 +17,7 @@ class Venue(BaseModel):
     PhoneNumber: str
     GoogleMapsEmbedUrl: Optional[HttpUrl] = None
     IsFeatured: bool
+    IsMonitored: bool
     ImageUrls: Optional[List[HttpUrl]] = None
     Socials: Optional[List[Social]] = None
     Types: Optional[List[str]] = None
@@ -37,10 +38,11 @@ def format(tuple: tuple) -> Venue:
         PhoneNumber = tuple[8],
         GoogleMapsEmbedUrl = tuple[9],
         IsFeatured = tuple[10],
-        ImageUrls = tuple[11] or [],
-        Socials = tuple[12] or [],
-        Types = tuple[13] or [],
-        Tags = tuple[14] or [],
-        OpeningHours = tuple[15],
-        UpcomingEventIDs = tuple[16] or []
+        IsMonitored = tuple[11],
+        ImageUrls = tuple[12] or [],
+        Socials = tuple[13] or [],
+        Types = tuple[14] or [],
+        Tags = tuple[15] or [],
+        OpeningHours = tuple[16],
+        UpcomingEventIDs = tuple[17] or []
     )
