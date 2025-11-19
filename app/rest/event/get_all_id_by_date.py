@@ -111,13 +111,7 @@ def prepare(
         params.append(list_to_array_string(tags))
 
     if dates:
-        filters.append("""
-            EXISTS (
-                SELECT 1 FROM EventPerformance
-                WHERE EventPerformance.EventID = Event.EventID
-                AND DATE(EventPerformance.StartDateTime) = ANY(%s::DATE[])
-            )
-        """)
+        filters.append("DATE(StartDateTime) = ANY(%s::DATE[])")
         params.append(dates)
 
     if filters:
