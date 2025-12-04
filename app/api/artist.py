@@ -40,6 +40,7 @@ def get_all_id_(
     name: Optional[str] = None,
     country: Optional[str] = None,
     city: Optional[str] = None,
+    stateCodes: Optional[list[str]] = Query(default=None),
     types: Optional[list[str]] = Query(default=None),
     tags: Optional[list[str]] = Query(default=None),
     hasUpcomingEvent: Optional[bool] = None,
@@ -48,6 +49,7 @@ def get_all_id_(
         name=name,
         country=country,
         city=city,
+        stateCodes=stateCodes,
         types=types,
         tags=tags,
         hasUpcomingEvent=hasUpcomingEvent

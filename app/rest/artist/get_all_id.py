@@ -8,6 +8,7 @@ def get_all_id(
     name: Optional[str] = None,
     country: Optional[str] = None,
     city: Optional[str] = None,
+    stateCodes: Optional[List[str]] = None,
     types: Optional[List[str]] = None,
     tags: Optional[List[str]] = None,
     hasUpcomingEvent: Optional[bool] = None
@@ -17,6 +18,7 @@ def get_all_id(
         name=name,
         country=country,
         city=city,
+        stateCodes=stateCodes,
         types=types,
         tags=tags,
         hasUpcomingEvent=hasUpcomingEvent
@@ -29,6 +31,7 @@ def prepare(
     name: Optional[str] = None,
     country: Optional[str] = None,
     city: Optional[str] = None,
+    stateCodes: Optional[List[str]] = None,
     types: Optional[List[str]] = None,
     tags: Optional[List[str]] = None,
     hasUpcomingEvent: Optional[bool] = None
@@ -50,6 +53,10 @@ def prepare(
     if city:
         filters.append("Artist.City = %s")
         params.append(city)
+
+    if stateCodes:
+        filters.append("Artist.StateCode = ANY(%s::STATECODE[])")
+        params.append(list_to_array_string(stateCodes))
 
     if types:
         filters.append("""
