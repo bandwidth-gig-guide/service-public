@@ -90,12 +90,11 @@ def prepare(
         """)
         params.append(hasUpcomingEvent)
 
-    if filters:
-        query += " WHERE " + " AND ".join(filters)
+    query += " WHERE Artist.ArtistID NOT IN ({})".format(RESERVED_UUIDS_STRING)
 
-    query += """ 
-        WHERE Artist.ArtistID NOT IN ({})
-        ORDER BY Artist.IsFeatured DESC, Artist.Title ASC
-    """.format(RESERVED_UUIDS_STRING)
+    if filters:
+        query += " AND " + " AND ".join(filters)
+
+    query += " ORDER BY Artist.IsFeatured DESC, Artist.Title ASC; "
 
     return query, params
