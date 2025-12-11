@@ -1,5 +1,7 @@
 from uuid import UUID
 from app.query.fetch_list import execute
+from app.const.reserved_uuids import RESERVED_UUIDS_STRING
+
 
 def get_recommended(artist_id: UUID) -> list[UUID]:
     rows = execute(query(), value(artist_id))
@@ -12,6 +14,7 @@ def query():
             FROM Artist
             JOIN ArtistTag ON Artist.ArtistID = ArtistTag.ArtistID
             WHERE Artist.ArtistID != %s
+            AND Artist.ArtistID NOT IN ({})
             AND ArtistTag.Tag IN 
             (
                 SELECT Tag 
@@ -36,6 +39,7 @@ def query():
                 FROM Artist
                 WHERE Artist.IsFeatured = TRUE
                 AND Artist.ArtistID != %s
+                AND Artist.ArtistID NOT IN ({})
                 AND Artist.ArtistID NOT IN (SELECT ArtistID FROM SimilarArtists)
                 ORDER BY RANDOM()
                 LIMIT 4
@@ -43,7 +47,7 @@ def query():
         )
         ORDER BY RANDOM()
         LIMIT 8;
-    """
+    """.format(RESERVED_UUIDS_STRING, RESERVED_UUIDS_STRING)
 
 def value(artist_id: UUID):
     return (str(artist_id), str(artist_id), str(artist_id))

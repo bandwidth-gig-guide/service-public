@@ -2,6 +2,8 @@ from uuid import UUID
 from typing import Optional, List, Tuple
 from app.query.fetch_list import execute
 from app.util.list_to_array_string import list_to_array_string
+from app.const.reserved_uuids import RESERVED_UUIDS_STRING
+
 
 
 def get_all_id(
@@ -91,6 +93,9 @@ def prepare(
     if filters:
         query += " WHERE " + " AND ".join(filters)
 
-    query += " ORDER BY Artist.IsFeatured DESC, Artist.Title ASC;"
+    query += f""" 
+        WHERE Artist.ArtistID NOT IN ({RESERVED_UUIDS_STRING})
+        ORDER BY Artist.IsFeatured DESC, Artist.Title ASC
+    """
 
     return query, params
