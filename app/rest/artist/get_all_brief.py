@@ -1,12 +1,13 @@
 from app.query.fetch_list import execute
 from app.model.artist_brief import ArtistBrief, format
+from app.const.reserved_uuids import RESERVED_UUIDS_STRING
 
 def get_all_brief() -> list[ArtistBrief]:
     rows = execute(query())
     return [format(row) for row in rows]
 
 def query():
-    return """
+    return f"""
         SELECT 
             Artist.ArtistID,
             Artist.Title,
@@ -31,5 +32,6 @@ def query():
             ) AS EventCount
 
         FROM Artist
+        WHERE Artist.ArtistID NOT IN ({RESERVED_UUIDS_STRING})
         ORDER BY Artist.IsFeatured DESC, Artist.Title ASC;
     """
