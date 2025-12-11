@@ -93,9 +93,9 @@ def prepare(
     if filters:
         query += " WHERE " + " AND ".join(filters)
 
-    query += f""" 
-        WHERE Artist.ArtistID NOT IN ({RESERVED_UUIDS_STRING})
+    query += """ 
+        WHERE Artist.ArtistID NOT IN ({})
         ORDER BY Artist.IsFeatured DESC, Artist.Title ASC
-    """
+    """.format(RESERVED_UUIDS_STRING)
 
     return query, params

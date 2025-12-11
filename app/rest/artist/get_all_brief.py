@@ -7,7 +7,7 @@ def get_all_brief() -> list[ArtistBrief]:
     return [format(row) for row in rows]
 
 def query():
-    return f"""
+    return """
         SELECT 
             Artist.ArtistID,
             Artist.Title,
@@ -32,6 +32,6 @@ def query():
             ) AS EventCount
 
         FROM Artist
-        WHERE Artist.ArtistID NOT IN ({RESERVED_UUIDS_STRING})
+        WHERE Artist.ArtistID NOT IN ({})
         ORDER BY Artist.IsFeatured DESC, Artist.Title ASC;
-    """
+    """.format(RESERVED_UUIDS_STRING)
