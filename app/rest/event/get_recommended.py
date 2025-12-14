@@ -3,7 +3,15 @@ from app.query.fetch_list import execute
 
 def get_recommended(event_id: UUID) -> list[UUID]:
     rows = execute(query(), value(event_id))
-    return [row[0] for row in rows]
+    result = [row[0] for row in rows]
+    
+    if len(result) < 8:
+        remaining_needed = 8 - len(result)
+        random_rows = execute(fallback_query(remaining_needed), fallback_value(event_id, result))
+        result.extend([row[0] for row in random_rows])
+    
+    return result[:8]
+
 
 def query():
     return """
@@ -65,3 +73,18 @@ def query():
 
 def value(event_id: UUID):
     return (str(event_id), str(event_id), str(event_id), str(event_id), str(event_id))
+
+
+def fallback_query(limit: int):
+    return f"""
+        SELECT Event.EventID
+        FROM Event
+        WHERE Event.EventID != %s
+        AND Event.StartDateTime > NOW()
+        AND Event.EventID NOT IN ({', '.join(['%s'] * len([]))})
+        ORDER BY RANDOM()
+        LIMIT {limit};
+    """
+
+def fallback_value(event_id: UUID, existing_events: list[UUID]):
+    return (str(event_id), *[str(eid) for eid in existing_events])

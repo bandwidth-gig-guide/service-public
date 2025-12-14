@@ -5,7 +5,15 @@ from app.const.reserved_uuids import RESERVED_UUIDS_STRING
 
 def get_recommended(artist_id: UUID) -> list[UUID]:
     rows = execute(query(), value(artist_id))
-    return [row[0] for row in rows]
+    result = [row[0] for row in rows]
+    
+    if len(result) < 8:
+        remaining_needed = 8 - len(result)
+        random_rows = execute(fallback_query(remaining_needed), fallback_value(artist_id, result))
+        result.extend([row[0] for row in random_rows])
+    
+    return result[:8]
+
 
 def query():
     return """
@@ -51,3 +59,19 @@ def query():
 
 def value(artist_id: UUID):
     return (str(artist_id), str(artist_id), str(artist_id))
+
+
+
+def fallback_query(limit: int):
+    return f"""
+        SELECT Artist.ArtistID
+        FROM Artist
+        WHERE Artist.ArtistID != %s
+        AND Artist.ArtistID NOT IN ({RESERVED_UUIDS_STRING})
+        AND Artist.ArtistID NOT IN ({', '.join(['%s'] * len([]))})
+        ORDER BY RANDOM()
+        LIMIT {limit};
+    """
+
+def fallback_value(artist_id: UUID, existing_artists: list[UUID]):
+    return (str(artist_id), *[str(aid) for aid in existing_artists])
