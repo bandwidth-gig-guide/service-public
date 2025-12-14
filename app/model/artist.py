@@ -14,6 +14,7 @@ class Artist(BaseModel):
     SpotifyEmbedUrl: Optional[HttpUrl] = None
     YoutubeEmbedUrl: Optional[HttpUrl] = None
     IsFeatured: bool
+    IsResearched: bool
     ImageUrls: Optional[List[HttpUrl]] = None
     Socials: Optional[List[Social]] = None
     Types: Optional[List[str]] = None
@@ -32,9 +33,10 @@ def format(tuple: tuple) -> Artist:
         SpotifyEmbedUrl = tuple[7],
         YoutubeEmbedUrl = tuple[8],
         IsFeatured = tuple[9],
-        ImageUrls = tuple[10] or [],
-        Socials = tuple[11] or [],
-        Types = tuple[12] or [],
-        Tags = tuple[13] or [],
-        UpcomingEventIDs = tuple[14] or []
+        IsResearched = tuple[10],
+        ImageUrls = tuple[11] or [],
+        Socials = tuple[12] or [],
+        Types = tuple[13] or [],
+        Tags = tuple[14] or [],
+        UpcomingEventIDs = tuple[15] or []
     )
