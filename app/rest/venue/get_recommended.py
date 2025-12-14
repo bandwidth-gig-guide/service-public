@@ -64,9 +64,10 @@ def fallback_query():
         SELECT Venue.VenueID
         FROM Venue
         WHERE Venue.VenueID != %s
+        AND Venue.VenueID NOT IN ({})
         ORDER BY RANDOM()
         LIMIT 8;
-    """
+    """.format(RESERVED_UUIDS_STRING)
 
 def fallback_value(venue_id: UUID):
     return (str(venue_id), )

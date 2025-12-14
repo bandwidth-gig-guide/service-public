@@ -66,9 +66,10 @@ def fallback_query():
         SELECT Artist.ArtistID
         FROM Artist
         WHERE Artist.ArtistID != %s
+        AND Artist.ArtistID NOT IN ({})
         ORDER BY RANDOM()
         LIMIT 8;
-    """
+    """.format(RESERVED_UUIDS_STRING)
 
 def fallback_value(artist_id: UUID):
     return (str(artist_id), )
