@@ -14,6 +14,7 @@ def query():
             Artist.Country,
             Artist.City,
             Artist.IsFeatured,
+            Artist.IsResearched,
 
             (
                 SELECT Url 

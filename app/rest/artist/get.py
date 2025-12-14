@@ -19,6 +19,7 @@ def query():
             Artist.SpotifyEmbedUrl,
             Artist.YoutubeEmbedUrl,
             Artist.IsFeatured,
+            Artist.IsResearched,
 
             (
                 SELECT json_agg(Image.Url ORDER BY ArtistImage.DisplayOrder ASC)
