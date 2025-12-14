@@ -6,9 +6,8 @@ def get_recommended(event_id: UUID) -> list[UUID]:
     result = [row[0] for row in rows]
     
     if len(result) < 8:
-        remaining_needed = 8 - len(result)
-        random_rows = execute(fallback_query(remaining_needed), fallback_value(event_id, result))
-        result.extend([row[0] for row in random_rows])
+        random_rows = execute(fallback_query(), fallback_value(event_id))
+        result.extend([row[0] for row in random_rows if row[0] not in result])
     
     return result[:8]
 
@@ -75,16 +74,14 @@ def value(event_id: UUID):
     return (str(event_id), str(event_id), str(event_id), str(event_id), str(event_id))
 
 
-def fallback_query(limit: int):
-    return f"""
+def fallback_query():
+    return """
         SELECT Event.EventID
         FROM Event
         WHERE Event.EventID != %s
-        AND Event.StartDateTime > NOW()
-        AND Event.EventID NOT IN ({', '.join(['%s'] * len([]))})
         ORDER BY RANDOM()
-        LIMIT {limit};
+        LIMIT 8;
     """
 
-def fallback_value(event_id: UUID, existing_events: list[UUID]):
-    return (str(event_id), *[str(eid) for eid in existing_events])
+def fallback_value(event_id: UUID):
+    return (str(event_id), )

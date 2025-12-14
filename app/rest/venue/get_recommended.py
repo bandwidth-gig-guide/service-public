@@ -7,9 +7,8 @@ def get_recommended(venue_id: UUID) -> list[UUID]:
     result = [row[0] for row in rows]
     
     if len(result) < 8:
-        remaining_needed = 8 - len(result)
-        random_rows = execute(fallback_query(remaining_needed), fallback_value(venue_id, result))
-        result.extend([row[0] for row in random_rows])
+        random_rows = execute(fallback_query(), fallback_value(venue_id))
+        result.extend([row[0] for row in random_rows if row[0] not in result])
     
     return result[:8]
 
@@ -60,16 +59,14 @@ def value(venue_id: UUID):
     return (str(venue_id), str(venue_id), str(venue_id))
 
 
-def fallback_query(limit: int):
-    return f"""
+def fallback_query():
+    return """
         SELECT Venue.VenueID
         FROM Venue
         WHERE Venue.VenueID != %s
-        AND Venue.VenueID NOT IN ({RESERVED_UUIDS_STRING})
-        AND Venue.VenueID NOT IN ({', '.join(['%s'] * len([]))})
         ORDER BY RANDOM()
-        LIMIT {limit};
+        LIMIT 8;
     """
 
-def fallback_value(venue_id: UUID, existing_venues: list[UUID]):
-    return (str(venue_id), *[str(vid) for vid in existing_venues])
+def fallback_value(venue_id: UUID):
+    return (str(venue_id), )
