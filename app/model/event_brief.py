@@ -11,7 +11,7 @@ class EventBrief(BaseModel):
     IsFeatured: bool
     ImageUrl: Optional[HttpUrl] = None
     ArtistTitles: List[str]
-    MinPrice: int
+    MinPrice: float
 
 def format(tuple: tuple) -> EventBrief:
     return EventBrief (
