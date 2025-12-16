@@ -3,6 +3,7 @@ import json
 import hashlib
 from typing import Callable, Any
 import redis
+from pydantic import BaseModel
 
 
 REDIS_HOST = os.getenv("REDIS_HOST", "")
@@ -58,12 +59,20 @@ def cache_wrap( key: str, fetch_fn: Callable[[], Any], ttl: int = DEFAULT_TTL, )
     try:
         cached = _redis.get(key)
         if cached is not None:
-            print("Cache hit!")
             return json.loads(cached)
 
         data = fetch_fn()
-        _redis.setex(key, ttl, json.dumps(data, default=str))
-        return data
 
-    except Exception:
+        if isinstance(data, BaseModel):
+            data_to_cache = data.dict()
+        elif isinstance(data, list) and data and isinstance(data[0], BaseModel):
+            data_to_cache = [item.dict() for item in data]
+        else:
+            data_to_cache = data
+
+        _redis.setex(key, ttl, json.dumps(data_to_cache, default=str))
+        return data_to_cache
+
+    except Exception as e:
+        print(f"[CACHE] Redis error: {e}")
         return fetch_fn()
