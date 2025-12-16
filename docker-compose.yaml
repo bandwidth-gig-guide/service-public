@@ -1,4 +1,17 @@
 services:
+
+  cache:
+    image: redis:7-alpine
+    container_name: service-public-cache
+    command: ["redis-server", "--appendonly", "yes"]
+    ports:
+      - "6379:6379"
+    restart: unless-stopped
+    volumes: 
+      - cache-data:/data
+    networks:
+      - bandwidth
+
   db-main:
     image: ghcr.io/bandwidth-gig-guide/db-main:latest
     container_name: db-main
@@ -20,6 +33,9 @@ services:
     restart: unless-stopped
     env_file:
       - ./dev/dev.env
+    environment:
+      - REDIS_HOST=cache
+      - REDIS_PORT=6379
     volumes:
       - ./app:/code/app
     depends_on:
@@ -48,6 +64,7 @@ networks:
     driver: bridge
 
 volumes:
+  cache-data:
   db-main-data:
   reverse-proxy-data:
   reverse-proxy-config:
