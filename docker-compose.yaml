@@ -2,7 +2,7 @@ services:
 
   cache:
     image: redis:7-alpine
-    container_name: service-public-cache
+    container_name: cache
     command: ["redis-server", "--appendonly", "yes"]
     ports:
       - "6379:6379"
